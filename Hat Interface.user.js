@@ -8,8 +8,11 @@
 // @grant        none
 // ==/UserScript==
 
-var importantItems = ['Pip-Boy', 'Cosa Nostra Cap', 'Le Party Phantom', 'Reggaelator', 'Team Captain', 'Level Three Chin', 'Das Ubersternmann', 'Packable Provisions', 'Dr%27s Dapper Topper'];
+var importantItems = ['Pip-Boy', 'Cosa Nostra Cap', 'Doublecross-Comm', 'Dead of Night', 'Head Warmer', 'Le Party Phantom', 'Reggaelator', 'Red Army Robin', 'Cold Killer', 'Law', 'Void Monk Hair', 'Fancy Dress Uniform', 'Team Captain', 'Hunger Force', 'Grenadier Helm', 'Das Ubersternmann', 'Birdman of Australiacatraz', 'Packable Provisions'];
 var priority = 100;
+
+var autoReload = true;
+var notFound = true;
 
 (function() {
     'use strict';
@@ -32,7 +35,9 @@ var priority = 100;
                 if(itemName.split('+').join(' ').includes(importantItems[j]) && !itemName.includes("<span+class='quality11'>"))
                 {
                     if(!divList[i].getAttribute("data-content").includes('This item will decrease in price shortly.') || j === 0) {
+                        document.title = '[!] ' + document.title;
                         divList[i].getElementsByClassName("item-value-indicator")[0].style.backgroundColor = '#aa0099';
+                        notFound = false;
                         if(j <= priority) {
                             divList[i].getElementsByClassName("item-value-indicator")[0].scrollIntoView();
                             priority = j;
@@ -57,4 +62,15 @@ var priority = 100;
             divList[i].getElementsByClassName("item-value-indicator")[0].appendChild(bpLink);
         }
     }
+    if(notFound && autoReload) {
+        document.title = '[...] ' + document.title;
+        setTimeout(function(){
+            location.reload(true);
+        }, 15000);
+    }
+    if((!notFound && autoReload) && !document.hasFocus())
+    {
+        window.open('http://Found');
+    }
+
 })();
